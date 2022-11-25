@@ -25,3 +25,4 @@ I provide here a short (and truncated) summary of the topics the code were writt
 - Image processing of X-ray data (MRes/Integrated Research Project)
 - Monte Carlo integration (MRes/Other)
 - The quantum HHL algorithm (MRes/Quantum computing) 
+- Autocorrelation analysis, a comparison of given data and a proposed model (see description in report, Summer Research Project/...)
