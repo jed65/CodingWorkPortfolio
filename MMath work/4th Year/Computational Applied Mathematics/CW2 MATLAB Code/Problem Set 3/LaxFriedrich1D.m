@@ -1,0 +1,31 @@
+function [x,t,u] = LaxFriedrich1D(Func_u0,a,N_x,M_t)
+%LaxFriedrich1D.m: Function taking inputs of Func_u0 (a function that can
+%be used to calculate u at the initial time, a (the constant in the scalar
+%transport equation), N_x (number of steps in space) and M_t (number of
+%steps in time), that implements the Lax-Friedrich method, returning a
+%matrix u of points, wherein each row represents a single time step of the
+%method.
+
+%Define step-sizes and discretisation vectors in each direction
+dx=2*pi/N_x;
+dt=1/M_t;
+lambda=dt/dx;
+x=linspace(0,2*pi,N_x+1);
+t=linspace(0,1,M_t+1);
+
+%Initialise u and apply function for initial condition
+u=zeros(length(t),length(x)); %initialise u as matrix where each row represents a fixed time
+u(1,:)=Func_u0(x); %call function to calculate u at initial time (this is given in the problem)
+
+%Now apply the method
+for n=1:M_t %fix the time/row
+    for j=1:N_x+1 %fix the x-value/column
+        if j==1 %in this case, we are at boundary (first x value for each fixed time)
+            u(n+1,j)=u(n,j)-(a*lambda/2)*(u(n,j+1)-u(n,N_x+1-j))+0.5*(u(n,j+1)-2*u(n,j)+u(n,N_x+1-j)); %use periodic boundary condition (u_{-1}^{n}=u_{N-1}^{n})
+        elseif j==N_x+1 %at boundary again (final x value for each fixed time)
+            u(n+1,j)=u(n+1,1); %equivalent to the above due to periodic boundary condition (u_{N}^{n}=u_{0}^{n} for all n
+        else 
+            u(n+1,j)=u(n,j)-(a*lambda/2)*(u(n,j+1)-u(n,j-1))+0.5*(u(n,j+1)-2*u(n,j)+u(n,j-1)); %use general formula here
+        end
+    end
+end
